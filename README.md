@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Chris Merino — Portfolio
 
-## Getting Started
+A polished, production-ready personal portfolio for **Chris Merino**, Frontend Engineer.
+Single-page, dark-themed, fast, and accessible.
 
-First, run the development server:
+Built with:
+
+- **Next.js 16** (App Router) + **TypeScript**
+- **Tailwind CSS v4**
+- **Framer Motion** (scroll-reveal + micro-interactions, `prefers-reduced-motion` aware)
+- **lucide-react** (icons)
+- **sonner** (dark-themed toast notifications)
+
+## Features
+
+- Modern dark design with one cohesive accent gradient (indigo → cyan) and glassmorphism cards
+- Ambient, GPU-light animated background glow + subtle grid behind the hero
+- Sticky navbar with active-section highlight, scroll-progress bar, and a mobile menu
+- Sections: Hero · About · Tech Stack · Experience (timeline) · Projects · Contact / Footer
+- Fully responsive (mobile-first), WCAG AA contrast, keyboard-navigable, visible focus rings
+- Featured projects with hover glow:
+  - **HydraFlow Wellness** → opens the live site in a new tab
+  - **AceLoop** → fires a dark-themed “coming soon” toast (no navigation), keyboard accessible
+
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Other scripts:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build   # production build
+npm run start   # serve the production build
+npm run lint    # eslint
+```
 
-## Learn More
+## Editing content
 
-To learn more about Next.js, take a look at the following resources:
+All site copy lives in a single typed config file:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+src/data/content.ts
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Update the exported objects/arrays there — `identity`, `hero`, `about`, `techStack`,
+`experience`, `projects`, `contact`, `footer`, and `navLinks`. Components map over this
+data, so no component edits are needed to change wording, add experience entries, or add
+tech-stack chips.
 
-## Deploy on Vercel
+To add or change a project, edit the `projects` array. Each project's `action` is either:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `{ kind: "link", label, href, domain? }` — renders a button that opens `href` in a new tab
+- `{ kind: "toast", label, message }` — renders a button that fires a toast (no navigation)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Resume
+
+The “Resume” / “Download Resume” buttons link to `/resume.pdf`.
+A placeholder file lives at `public/resume.pdf` — **drop the real PDF there** (same filename)
+to replace it. No code changes needed.
+
+## Metadata / OG image
+
+Page metadata and Open Graph tags are set in `src/app/layout.tsx`. The Open Graph image is
+generated on the fly by `src/app/opengraph-image.tsx` (edit that file to customize it). The
+favicon/monogram is `src/app/icon.svg`.
+
+## Deploy to Vercel
+
+1. Push this repo to GitHub (or GitLab/Bitbucket).
+2. Go to [vercel.com/new](https://vercel.com/new) and import the repository.
+3. Framework preset auto-detects **Next.js** — no configuration needed. Click **Deploy**.
+
+Or deploy from the CLI:
+
+```bash
+npm i -g vercel
+vercel        # preview deploy
+vercel --prod # production deploy
+```
+
+## Accessibility & performance notes
+
+- Non-essential motion is disabled for users with `prefers-reduced-motion`.
+- Semantic landmarks (`header`, `nav`, `main`, `footer`), a skip link, aria labels on
+  icon-only buttons, and visible focus rings.
+- Fonts loaded via `next/font` (Geist + Geist Mono) with `display: swap`.
+- No CMS, database, or backend — fully static marketing site.
+
+© 2026 Chris Merino · EN · ES · PT
