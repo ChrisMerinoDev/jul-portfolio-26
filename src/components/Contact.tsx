@@ -17,7 +17,7 @@ const links = [
     external: true,
   },
   {
-    label: "Download résumé",
+    label: "Download resume",
     detail: "PDF",
     href: contact.resumeHref,
     external: false,
