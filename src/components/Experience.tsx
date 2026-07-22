@@ -25,7 +25,7 @@ export function Experience() {
             <div className="md:col-span-9">
               <h3 className="font-display text-[clamp(1.5rem,3vw,2.5rem)] font-light leading-[1.05] tracking-[-0.015em] text-ink">
                 {item.role}
-                <span className="italic text-accent"> — {item.org}</span>
+                <span className="italic text-accent">, {item.org}</span>
               </h3>
 
               {item.context && (

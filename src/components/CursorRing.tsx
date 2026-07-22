@@ -6,11 +6,14 @@ import { useEffect, useRef } from "react";
  * A color-cycling ring that replaces the native cursor and swells over
  * interactive elements.
  *
- * Performance: pointer position lives in refs (zero React re-renders); a single
- * rAF loop eases position + scale and writes transform/color straight to the
- * node — all compositor work via translate3d + will-change. `mix-blend-mode:
- * multiply` lets the cobalt→vermilion hue read richly against the cream paper.
- * Disabled on touch devices.
+ * Crispness: the ring is positioned with a translate3d transform, but its
+ * growth on hover animates real width/height (not `transform: scale`), so the
+ * border never stretches a cached bitmap — it stays razor-sharp at every size.
+ *
+ * Performance: pointer state lives in refs (zero React re-renders); one rAF
+ * loop eases position + size and writes straight to the node. `mix-blend-mode:
+ * multiply` lets the cobalt→plum hue read richly against the paper. Disabled on
+ * touch devices.
  */
 export function CursorRing() {
   const ringRef = useRef<HTMLDivElement>(null);
@@ -26,30 +29,32 @@ export function CursorRing() {
     const prevCursor = root.style.cursor;
     root.style.cursor = "none";
 
+    const BASE = 34;
+    const HOVER = 92;
+
     let targetX = window.innerWidth / 2;
     let targetY = window.innerHeight / 2;
     let x = targetX;
     let y = targetY;
-    let scale = 1;
-    let targetScale = 1;
+    let size = BASE;
+    let targetSize = BASE;
     let phase = 0;
     let raf = 0;
     let shown = false;
 
     const isInteractive = (el: EventTarget | null) =>
-      el instanceof Element &&
-      !!el.closest("a, button, [data-cursor='hover']");
+      el instanceof Element && !!el.closest("a, button, [data-cursor='hover']");
 
     const onMove = (e: MouseEvent) => {
       targetX = e.clientX;
       targetY = e.clientY;
-      targetScale = isInteractive(e.target) ? 2.6 : 1;
+      targetSize = isInteractive(e.target) ? HOVER : BASE;
       if (!shown) {
         shown = true;
         ring.style.opacity = "1";
       }
     };
-    const onDown = () => (targetScale *= 0.6);
+    const onDown = () => (targetSize *= 0.7);
     const onLeave = () => {
       shown = false;
       ring.style.opacity = "0";
@@ -59,13 +64,16 @@ export function CursorRing() {
       const ease = reduce ? 1 : 0.3;
       x += (targetX - x) * ease;
       y += (targetY - y) * ease;
-      scale += (targetScale - scale) * 0.18;
+      size += (targetSize - size) * 0.2;
 
-      // Sweep the hue cobalt → violet → magenta → vermilion and back.
+      // Sweep the hue cobalt → violet → magenta → plum and back.
       phase += 0.01;
-      const hue = (235 + (Math.sin(phase) * 0.5 + 0.5) * 139) % 360;
-      ring.style.borderColor = `hsl(${hue}, 85%, 52%)`;
-      ring.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%) scale(${scale})`;
+      const hue = (235 + (Math.sin(phase) * 0.5 + 0.5) * 90) % 360;
+
+      ring.style.width = `${size}px`;
+      ring.style.height = `${size}px`;
+      ring.style.borderColor = `hsl(${hue}, 80%, 52%)`;
+      ring.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
 
       raf = requestAnimationFrame(tick);
     };
@@ -88,7 +96,7 @@ export function CursorRing() {
     <div
       ref={ringRef}
       aria-hidden="true"
-      className="pointer-events-none fixed left-0 top-0 z-[9999] h-9 w-9 rounded-full border-[1.5px] opacity-0 will-change-transform"
+      className="pointer-events-none fixed left-0 top-0 z-[9999] h-[34px] w-[34px] rounded-full border-[1.5px] opacity-0 will-change-transform"
       style={{ mixBlendMode: "multiply", transition: "opacity 0.3s ease" }}
     />
   );

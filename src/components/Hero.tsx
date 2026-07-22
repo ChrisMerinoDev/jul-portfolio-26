@@ -49,7 +49,7 @@ export function Hero() {
     <section
       ref={root}
       id="top"
-      className="relative flex min-h-[100svh] flex-col justify-between px-6 pb-10 pt-28 sm:px-10 sm:pt-32"
+      className="relative flex min-h-svh flex-col justify-between px-6 pb-10 pt-28 sm:px-10 sm:pt-32"
     >
       <AmbientBackground />
 
@@ -61,8 +61,8 @@ export function Hero() {
         </span>
         <span data-hero-meta className="flex items-center gap-2 whitespace-nowrap">
           <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-warm opacity-60" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-accent-warm" />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#16a34a] opacity-60" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-[#16a34a]" />
           </span>
           Available · 2026
         </span>
@@ -70,7 +70,7 @@ export function Hero() {
 
       {/* the statement */}
       <div className="py-10">
-        <h1 className="font-display text-[clamp(2.5rem,7.8vw,7.8rem)] font-light leading-[0.98] tracking-[-0.035em] text-ink">
+        <h1 className="font-display text-[clamp(2.5rem,7.8vw,7.8rem)] font-normal leading-[0.98] tracking-[-0.02em] text-ink">
           <span data-hero-line className="line-mask">
             <span className="block">Frontend engineer</span>
           </span>

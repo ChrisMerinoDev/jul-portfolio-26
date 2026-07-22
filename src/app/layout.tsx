@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import { Fraunces, Archivo, IBM_Plex_Mono } from "next/font/google";
+import { Newsreader, Archivo, IBM_Plex_Mono } from "next/font/google";
 import { Toaster } from "sonner";
 import { CursorRing } from "@/components/CursorRing";
 import { RevealController } from "@/components/RevealController";
+import { ScrollBackground } from "@/components/ScrollBackground";
 import "./globals.css";
 
-// Display — a characterful old-style serif with optical sizing + true italics.
-const fraunces = Fraunces({
+// Display: a refined editorial serif with optical-display cuts and true italics.
+const newsreader = Newsreader({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-display",
@@ -32,7 +33,7 @@ const siteUrl = "https://chrismerino.dev";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Chris Merino — Frontend Engineer",
+  title: "Chris Merino, Frontend Engineer",
   description:
     "Frontend Engineer building fast, accessible web apps with React, Next.js, and TypeScript. From enterprise healthcare SaaS to paid client work.",
   keywords: [
@@ -45,7 +46,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Chris Merino" }],
   openGraph: {
-    title: "Chris Merino — Frontend Engineer",
+    title: "Chris Merino, Frontend Engineer",
     description:
       "Frontend Engineer building fast, accessible web apps with React, Next.js, and TypeScript.",
     url: siteUrl,
@@ -56,13 +57,13 @@ export const metadata: Metadata = {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Chris Merino — Frontend Engineer",
+        alt: "Chris Merino, Frontend Engineer",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Chris Merino — Frontend Engineer",
+    title: "Chris Merino, Frontend Engineer",
     description:
       "Frontend Engineer building fast, accessible web apps with React, Next.js, and TypeScript.",
     images: ["/opengraph-image"],
@@ -77,7 +78,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fraunces.variable} ${archivo.variable} ${plexMono.variable} reveal-init h-full antialiased`}
+      className={`${newsreader.variable} ${archivo.variable} ${plexMono.variable} reveal-init h-full antialiased`}
     >
       <head>
         {/* If JS is off, never leave reveal content hidden */}
@@ -86,6 +87,7 @@ export default function RootLayout({
         </noscript>
       </head>
       <body className="min-h-full flex flex-col">
+        <ScrollBackground />
         <CursorRing />
         <RevealController />
         {children}

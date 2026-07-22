@@ -17,7 +17,7 @@ export const hero = {
   subheadline:
     "Frontend Engineer building fast, accessible web apps with React, Next.js, and TypeScript.",
   supporting:
-    "From enterprise healthcare SaaS to paid client work — I take features from idea to production.",
+    "From enterprise healthcare SaaS to paid client work. I take features from idea to production.",
   primaryCta: { label: "View Projects", href: "#projects" },
   secondaryCta: { label: "Get in Touch", href: "#contact" },
   badge: "EN · ES · PT",

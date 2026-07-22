@@ -29,7 +29,7 @@ export function Contact() {
     <Section id="contact" className="pb-24">
       <div className="border-t border-ink pt-6">
         <span data-reveal className="caption text-accent">
-          05 — Contact
+          05 / Contact
         </span>
       </div>
 

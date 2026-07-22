@@ -52,7 +52,7 @@ export function Navbar() {
         <a
           href="#top"
           className="group flex items-center gap-3"
-          aria-label="Chris Merino — back to top"
+          aria-label="Chris Merino, back to top"
         >
           <span className="grid h-9 w-9 place-items-center border border-ink font-mono text-sm font-semibold text-ink transition-colors group-hover:bg-ink group-hover:text-paper">
             CM
@@ -92,7 +92,7 @@ export function Navbar() {
             href={contact.resumeHref}
             className="hidden bg-ink px-5 py-2.5 caption text-paper transition-colors hover:bg-accent sm:inline-flex"
           >
-            Résumé
+            Resume
           </a>
           <button
             type="button"
@@ -132,7 +132,7 @@ export function Navbar() {
               onClick={() => setOpen(false)}
               className="inline-flex bg-ink px-5 py-3 caption text-paper"
             >
-              Résumé
+              Resume
             </a>
           </li>
         </ul>
