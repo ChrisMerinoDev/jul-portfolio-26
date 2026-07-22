@@ -1,7 +1,7 @@
 /**
- * Ambient hero backdrop: slow, GPU-light gradient glows over a faint grid.
- * Purely decorative — hidden from assistive tech. Animation is CSS-only and
- * automatically stilled by the prefers-reduced-motion rule in globals.css.
+ * Editorial hero backdrop — a faint six-column magazine grid with two soft
+ * ink-blooms (cobalt + vermilion). Purely decorative; the page-wide grain
+ * lives in globals.css. Static and GPU-cheap.
  */
 export function AmbientBackground() {
   return (
@@ -9,40 +9,33 @@ export function AmbientBackground() {
       aria-hidden="true"
       className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
     >
-      {/* faint grid texture */}
+      {/* six-column rule grid, faded toward the bottom */}
       <div
-        className="absolute inset-0 opacity-[0.35]"
+        className="absolute inset-0 opacity-70"
         style={{
           backgroundImage:
-            "linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px)",
-          backgroundSize: "56px 56px",
-          maskImage:
-            "radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%)",
-          WebkitMaskImage:
-            "radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%)",
+            "repeating-linear-gradient(90deg, transparent, transparent calc(100% / 6 - 1px), var(--line) calc(100% / 6 - 1px), var(--line) calc(100% / 6))",
+          maskImage: "linear-gradient(to bottom, #000 0%, transparent 88%)",
+          WebkitMaskImage: "linear-gradient(to bottom, #000 0%, transparent 88%)",
         }}
       />
 
-      {/* accent glow — indigo */}
+      {/* cobalt bloom, upper right */}
       <div
-        className="animate-drift absolute -top-40 left-1/2 h-[38rem] w-[38rem] -translate-x-1/2 rounded-full opacity-40 blur-[120px] will-change-transform"
+        className="absolute -top-40 right-[-12%] h-[42rem] w-[42rem] rounded-full opacity-[0.13] blur-[130px]"
+        style={{
+          background: "radial-gradient(circle at center, var(--accent), transparent 66%)",
+        }}
+      />
+
+      {/* vermilion bloom, lower left */}
+      <div
+        className="absolute bottom-[-14%] left-[-10%] h-[32rem] w-[32rem] rounded-full opacity-[0.10] blur-[130px]"
         style={{
           background:
-            "radial-gradient(circle at center, var(--accent-from), transparent 62%)",
+            "radial-gradient(circle at center, var(--accent-warm), transparent 66%)",
         }}
       />
-
-      {/* accent glow — cyan */}
-      <div
-        className="animate-drift-slow absolute -top-24 right-[8%] h-[26rem] w-[26rem] rounded-full opacity-30 blur-[110px] will-change-transform"
-        style={{
-          background:
-            "radial-gradient(circle at center, var(--accent-to), transparent 62%)",
-        }}
-      />
-
-      {/* fade to background at the bottom of the hero */}
-      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-[var(--background)]" />
     </div>
   );
 }

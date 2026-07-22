@@ -1,94 +1,135 @@
 @import "tailwindcss";
 
-/* ---------------------------------------------------------------
-   Design tokens — modern dark + one cohesive accent (indigo → cyan)
---------------------------------------------------------------- */
+/* ===============================================================
+   EDITORIAL INK — warm cream paper, ink black, electric cobalt.
+   Print-magazine meets terminal. One confident accent.
+   =============================================================== */
 :root {
-  --background: #0a0a0b;
-  --surface: #101015;
-  --surface-2: #16161d;
-  --foreground: #ededf2;
-  --muted: #a1a1ac;
-  --border: rgba(255, 255, 255, 0.08);
+  --paper: #f1ece1; /* warm cream ground        */
+  --paper-2: #e8e0d1; /* raised panel             */
+  --paper-3: #ddd3c0; /* deepest paper / inset    */
+  --ink: #14110d; /* near-black, warm         */
+  --ink-2: #2c2820; /* secondary ink            */
+  --muted: #6c6456; /* warm gray for captions   */
+  --line: rgba(20, 17, 13, 0.16); /* hairline rules          */
+  --line-strong: rgba(20, 17, 13, 0.32);
 
-  --accent-from: #6366f1; /* indigo-500 */
-  --accent-to: #22d3ee; /* cyan-400   */
+  --accent: #1d2bff; /* electric cobalt          */
+  --accent-deep: #1119b8;
+  --accent-warm: #e23d10; /* vermilion — rare punctuation */
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-surface: var(--surface);
-  --color-surface-2: var(--surface-2);
-  --color-foreground: var(--foreground);
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-paper-3: var(--paper-3);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
   --color-muted: var(--muted);
-  --color-border: var(--border);
-  --color-accent-from: var(--accent-from);
-  --color-accent-to: var(--accent-to);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-deep: var(--accent-deep);
+  --color-accent-warm: var(--accent-warm);
 
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+  --font-mono: var(--font-mono);
 }
 
 * {
-  border-color: var(--border);
+  border-color: var(--line);
 }
 
 html {
   scroll-behavior: smooth;
-  /* offset anchor targets so the sticky navbar doesn't cover them */
   scroll-padding-top: 5rem;
+  background: var(--paper);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
+  font-feature-settings: "ss01", "cv01";
 }
 
-/* Accessible, on-brand focus ring for keyboard users */
+/* Film grain over the whole page — keeps the cream from looking flat/digital */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Ink text-selection */
+::selection {
+  background: var(--accent);
+  color: var(--paper);
+}
+
+/* Cobalt focus ring for keyboard users */
 :focus-visible {
-  outline: 2px solid var(--accent-to);
-  outline-offset: 2px;
-  border-radius: 4px;
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
 }
 
-/* Reusable helpers ------------------------------------------------ */
-@utility text-gradient {
-  background-image: linear-gradient(120deg, var(--accent-from), var(--accent-to));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+/* ---- Typographic helpers --------------------------------------- */
+@utility font-display {
+  font-family: var(--font-display), Georgia, serif;
 }
 
-@utility glass {
-  background: color-mix(in oklab, var(--surface) 70%, transparent);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--border);
+/* Small mono caption/eyebrow */
+@utility caption {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
 }
 
-/* Slow ambient drift for the hero glow */
-@keyframes drift {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) scale(1);
+/* Editorial link: cobalt ink underline that wipes in on hover */
+@utility ed-link {
+  position: relative;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+/* Masked line for GSAP reveals: children translate up from behind the mask */
+@utility line-mask {
+  overflow: hidden;
+  display: block;
+}
+
+/* Prevent flash-of-unrevealed-content before GSAP runs (JS toggles this off) */
+.reveal-init [data-reveal],
+.reveal-init[data-reveal] {
+  opacity: 0;
+}
+
+/* Marquee track */
+@keyframes marquee {
+  from {
+    transform: translate3d(0, 0, 0);
   }
-  50% {
-    transform: translate3d(0, -4%, 0) scale(1.08);
+  to {
+    transform: translate3d(-50%, 0, 0);
   }
 }
-
-.animate-drift {
-  animation: drift 18s ease-in-out infinite;
+.animate-marquee {
+  animation: marquee 32s linear infinite;
 }
-.animate-drift-slow {
-  animation: drift 26s ease-in-out infinite;
+.animate-marquee-rev {
+  animation: marquee 40s linear infinite reverse;
 }
 
-/* Respect users who prefer reduced motion — disable non-essential motion */
+/* Respect reduced-motion — kill non-essential animation, reveal everything */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -100,20 +141,21 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
+  .reveal-init [data-reveal],
+  .reveal-init[data-reveal] {
+    opacity: 1 !important;
+  }
 }
 
-/* Subtle custom scrollbar */
+/* Custom scrollbar — ink on paper */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 11px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--background);
+  background: var(--paper);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--surface-2);
-  border-radius: 8px;
-  border: 2px solid var(--background);
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #2a2a34;
+  background: var(--ink);
+  border: 3px solid var(--paper);
+  border-radius: 0;
 }

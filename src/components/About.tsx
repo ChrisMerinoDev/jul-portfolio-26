@@ -1,35 +1,51 @@
-import { Globe } from "lucide-react";
 import { about, identity } from "@/data/content";
-import { Section, Reveal } from "./Section";
+import { Section } from "./Section";
 import { SectionHeading } from "./SectionHeading";
+
+const LANG_CODE: Record<string, string> = {
+  English: "EN",
+  Spanish: "ES",
+  Portuguese: "PT",
+};
 
 export function About() {
   return (
-    <Section id="about" stagger>
-      <SectionHeading eyebrow="01 — About" title={about.heading} />
+    <Section id="about">
+      <SectionHeading
+        index="01"
+        title="About"
+        note="React · Next.js · TypeScript"
+      />
 
-      <div className="grid gap-8 md:grid-cols-[1.6fr_1fr]">
-        <Reveal
-          as="p"
-          className="text-lg leading-relaxed text-[var(--foreground)]/90"
-        >
-          {about.paragraph}
-        </Reveal>
+      <div className="grid gap-12 md:grid-cols-12">
+        <div className="md:col-span-8">
+          <p
+            data-reveal
+            className="font-display text-[clamp(1.35rem,2.4vw,2rem)] font-light leading-[1.4] tracking-[-0.01em] text-ink"
+          >
+            {about.paragraph}
+          </p>
+        </div>
 
-        <Reveal className="glass h-fit rounded-2xl p-6">
-          <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-[var(--muted)]">
-            <Globe className="h-4 w-4 text-[var(--accent-to)]" aria-hidden="true" />
-            Languages
+        <aside className="md:col-span-4 md:border-l md:border-line md:pl-8">
+          <div data-reveal className="caption text-muted">
+            Spoken languages
           </div>
-          <ul className="mt-4 space-y-3">
+          <ul className="mt-6">
             {identity.languages.map((lang) => (
-              <li key={lang} className="flex items-center gap-3 text-[var(--foreground)]">
-                <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-[var(--accent-from)] to-[var(--accent-to)]" />
-                {lang}
+              <li
+                key={lang}
+                data-reveal
+                className="flex items-baseline justify-between border-b border-line py-4"
+              >
+                <span className="font-display text-2xl text-ink">{lang}</span>
+                <span className="caption text-accent">
+                  {LANG_CODE[lang] ?? ""}
+                </span>
               </li>
             ))}
           </ul>
-        </Reveal>
+        </aside>
       </div>
     </Section>
   );

@@ -69,7 +69,7 @@ export const experience: ExperienceItem[] = [
   {
     role: "Frontend Engineer Intern",
     org: "Medlaunch Concepts",
-    dates: "May 2026 – Aug 2026",
+    dates: "Apr 2026 – Jul 2026",
     context:
       "Medlaunch Portal, a healthcare accreditation and quality management platform (React 19, Vite).",
     points: [
@@ -142,11 +142,12 @@ export const projects: Project[] = [
       "Web Workers",
       "Supabase",
     ],
-    status: "Coming soon",
+    status: "Live",
     action: {
-      kind: "toast",
+      kind: "link",
       label: "View Project",
-      message: "AceLoop is launching soon — check back shortly!",
+      href: "https://aceloop.vercel.app",
+      domain: "aceloop.vercel.app",
     },
   },
 ];

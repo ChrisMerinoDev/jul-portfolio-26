@@ -1,18 +1,31 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Fraunces, Archivo, IBM_Plex_Mono } from "next/font/google";
 import { Toaster } from "sonner";
+import { CursorRing } from "@/components/CursorRing";
+import { RevealController } from "@/components/RevealController";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Display — a characterful old-style serif with optical sizing + true italics.
+const fraunces = Fraunces({
   subsets: ["latin"],
   display: "swap",
+  variable: "--font-display",
+  style: ["normal", "italic"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+// Body — a clean, slightly editorial grotesque.
+const archivo = Archivo({
   subsets: ["latin"],
   display: "swap",
+  variable: "--font-body",
+});
+
+// Labels / technical captions — a refined monospace.
+const plexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600"],
+  variable: "--font-mono",
 });
 
 const siteUrl = "https://chrismerino.dev";
@@ -64,19 +77,28 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${fraunces.variable} ${archivo.variable} ${plexMono.variable} reveal-init h-full antialiased`}
     >
+      <head>
+        {/* If JS is off, never leave reveal content hidden */}
+        <noscript>
+          <style>{`.reveal-init [data-reveal]{opacity:1 !important}`}</style>
+        </noscript>
+      </head>
       <body className="min-h-full flex flex-col">
+        <CursorRing />
+        <RevealController />
         {children}
         <Toaster
           position="bottom-right"
-          theme="dark"
+          theme="light"
           toastOptions={{
             style: {
-              background: "rgba(16, 16, 21, 0.9)",
-              border: "1px solid rgba(255, 255, 255, 0.1)",
-              color: "#ededf2",
-              backdropFilter: "blur(12px)",
+              background: "#f2ede2",
+              border: "1px solid rgba(20, 18, 16, 0.16)",
+              color: "#141210",
+              fontFamily: "var(--font-mono)",
+              fontSize: "13px",
             },
           }}
         />

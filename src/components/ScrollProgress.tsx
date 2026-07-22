@@ -1,24 +1,45 @@
 "use client";
 
-import { motion, useScroll, useSpring } from "framer-motion";
+import { useEffect, useRef } from "react";
 
 /**
- * Thin gradient progress bar pinned to the top of the viewport that tracks
- * overall scroll position. Decorative, so hidden from assistive tech.
+ * Thin cobalt progress bar tracking scroll position. Plain rAF-throttled scroll
+ * math written straight to a ref transform — no library, no re-renders.
  */
 export function ScrollProgress() {
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 120,
-    damping: 30,
-    restDelta: 0.001,
-  });
+  const barRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    let raf = 0;
+    const update = () => {
+      const doc = document.documentElement;
+      const max = doc.scrollHeight - doc.clientHeight;
+      const progress = max > 0 ? doc.scrollTop / max : 0;
+      if (barRef.current) {
+        barRef.current.style.transform = `scaleX(${progress})`;
+      }
+    };
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
 
   return (
-    <motion.div
+    <div
+      ref={barRef}
       aria-hidden="true"
-      style={{ scaleX }}
-      className="fixed inset-x-0 top-0 z-[60] h-[3px] origin-left bg-gradient-to-r from-[var(--accent-from)] to-[var(--accent-to)]"
+      className="fixed inset-x-0 top-0 z-[60] h-[2px] origin-left bg-accent"
+      style={{ transform: "scaleX(0)" }}
     />
   );
 }

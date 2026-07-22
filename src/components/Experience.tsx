@@ -1,54 +1,55 @@
 import { experience } from "@/data/content";
-import { Section, Reveal } from "./Section";
+import { Section } from "./Section";
 import { SectionHeading } from "./SectionHeading";
 
 export function Experience() {
   return (
-    <Section id="experience" stagger>
-      <SectionHeading eyebrow="03 — Journey" title="Experience" />
+    <Section id="experience">
+      <SectionHeading
+        index="03"
+        title="Experience"
+        note="Where I've shipped"
+      />
 
-      <ol className="relative space-y-10 border-l border-[var(--border)] pl-8">
+      <ol>
         {experience.map((item) => (
-          <Reveal as="li" key={`${item.org}-${item.dates}`} className="relative">
-            {/* timeline node */}
-            <span
-              aria-hidden="true"
-              className="absolute -left-[2.4rem] top-1.5 grid h-4 w-4 place-items-center rounded-full border border-[var(--accent-to)]/50 bg-[var(--background)]"
-            >
-              <span className="h-2 w-2 rounded-full bg-gradient-to-r from-[var(--accent-from)] to-[var(--accent-to)]" />
-            </span>
+          <li
+            key={`${item.org}-${item.dates}`}
+            data-reveal
+            className="group grid gap-6 border-t border-line py-10 md:grid-cols-12 md:gap-10"
+          >
+            <div className="md:col-span-3">
+              <span className="caption text-muted">{item.dates}</span>
+            </div>
 
-            <div className="glass rounded-2xl p-6 transition-colors hover:border-[var(--accent-to)]/40">
-              <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
-                <h3 className="text-lg font-semibold">
-                  {item.role}{" "}
-                  <span className="text-[var(--accent-to)]">· {item.org}</span>
-                </h3>
-                <span className="font-mono text-xs text-[var(--muted)] whitespace-nowrap">
-                  {item.dates}
-                </span>
-              </div>
+            <div className="md:col-span-9">
+              <h3 className="font-display text-[clamp(1.5rem,3vw,2.5rem)] font-light leading-[1.05] tracking-[-0.015em] text-ink">
+                {item.role}
+                <span className="italic text-accent"> — {item.org}</span>
+              </h3>
 
               {item.context && (
-                <p className="mt-2 text-sm text-[var(--muted)]">{item.context}</p>
+                <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted">
+                  {item.context}
+                </p>
               )}
 
-              <ul className="mt-4 space-y-2.5">
+              <ul className="mt-6 grid max-w-4xl gap-x-10 gap-y-3 md:grid-cols-2">
                 {item.points.map((point, i) => (
                   <li
                     key={i}
-                    className="flex gap-3 text-sm leading-relaxed text-[var(--foreground)]/85"
+                    className="flex gap-3 text-[0.95rem] leading-relaxed text-ink-2"
                   >
                     <span
                       aria-hidden="true"
-                      className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent-to)]/70"
+                      className="mt-2 h-1.5 w-1.5 shrink-0 bg-accent"
                     />
                     {point}
                   </li>
                 ))}
               </ul>
             </div>
-          </Reveal>
+          </li>
         ))}
       </ol>
     </Section>

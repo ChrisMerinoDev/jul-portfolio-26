@@ -1,79 +1,49 @@
-"use client";
-
-import { motion, useReducedMotion, type Variants } from "framer-motion";
 import type { ReactNode } from "react";
 
 type SectionProps = {
   id?: string;
   className?: string;
   children: ReactNode;
-  /** stagger children reveals when true */
+  /** kept for call-site compatibility; the reveal cascade is global */
   stagger?: boolean;
 };
 
 /**
- * Reusable section wrapper that handles the scroll-reveal animation.
- * Fades + slides its content up as it enters the viewport, and disables
- * the motion entirely for users who prefer reduced motion.
+ * Editorial section shell — generous magazine gutters and vertical rhythm.
+ * Server component; scroll reveals are handled globally by RevealController.
  */
-export function Section({ id, className = "", children, stagger = false }: SectionProps) {
-  const reduce = useReducedMotion();
-
-  const container: Variants = {
-    hidden: {},
-    visible: {
-      transition: stagger ? { staggerChildren: 0.08, delayChildren: 0.05 } : {},
-    },
-  };
-
+export function Section({ id, className = "", children }: SectionProps) {
   return (
-    <motion.section
+    <section
       id={id}
-      className={`relative mx-auto w-full max-w-6xl scroll-mt-24 px-6 py-20 sm:py-28 ${className}`}
-      variants={container}
-      initial={reduce ? undefined : "hidden"}
-      whileInView={reduce ? undefined : "visible"}
-      viewport={{ once: true, margin: "-80px" }}
+      className={`relative mx-auto w-full max-w-[86rem] scroll-mt-28 px-6 py-24 sm:px-10 sm:py-32 ${className}`}
     >
       {children}
-    </motion.section>
+    </section>
   );
 }
 
+type As = "div" | "li" | "h2" | "h3" | "p" | "span" | "ul" | "ol";
+
 /**
- * A single revealing element. Pairs with <Section stagger> or works standalone.
+ * A single element that reveals on scroll. Marked with `data-reveal`, which the
+ * global controller finds and animates. Renders plain markup on the server.
  */
 export function Reveal({
   children,
   className = "",
   as = "div",
-  delay = 0,
 }: {
   children: ReactNode;
   className?: string;
-  as?: "div" | "li" | "h2" | "p" | "span";
+  as?: As;
+  /** accepted for compatibility; global controller ignores per-item delay */
   delay?: number;
 }) {
-  const reduce = useReducedMotion();
-  const MotionTag = motion[as] as typeof motion.div;
-
-  const variants: Variants = {
-    hidden: { opacity: 0, y: 24 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1], delay },
-    },
-  };
-
-  if (reduce) {
-    const Tag = as;
-    return <Tag className={className}>{children}</Tag>;
-  }
-
+  const Tag = as;
   return (
-    <MotionTag className={className} variants={variants}>
+    <Tag data-reveal className={className}>
       {children}
-    </MotionTag>
+    </Tag>
   );
 }

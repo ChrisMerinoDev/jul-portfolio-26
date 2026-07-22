@@ -1,65 +1,79 @@
-import { Mail, Download } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { contact, identity } from "@/data/content";
-import { Section, Reveal } from "./Section";
+import { Section } from "./Section";
 import { GithubIcon } from "./GithubIcon";
+
+const links = [
+  {
+    label: "Email",
+    detail: identity.email,
+    href: `mailto:${identity.email}`,
+    external: false,
+  },
+  {
+    label: "GitHub",
+    detail: "@ChrisMerinoDev",
+    href: identity.github,
+    external: true,
+  },
+  {
+    label: "Download résumé",
+    detail: "PDF",
+    href: contact.resumeHref,
+    external: false,
+  },
+] as const;
 
 export function Contact() {
   return (
-    <Section id="contact" stagger className="pb-12">
-      <Reveal className="glass relative overflow-hidden rounded-3xl px-6 py-16 text-center sm:px-12">
-        {/* soft accent glow */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 -top-24 mx-auto h-48 w-[80%] rounded-full opacity-30 blur-[100px]"
-          style={{
-            background:
-              "radial-gradient(circle, var(--accent-from), transparent 70%)",
-          }}
-        />
-
-        <Reveal className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-[var(--accent-to)]">
+    <Section id="contact" className="pb-24">
+      <div className="border-t border-ink pt-6">
+        <span data-reveal className="caption text-accent">
           05 — Contact
-        </Reveal>
-        <Reveal
-          as="h2"
-          className="mx-auto max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl"
-        >
-          {contact.heading}
-        </Reveal>
-        <Reveal as="p" className="mx-auto mt-4 max-w-xl text-[var(--muted)]">
-          {contact.line}
-        </Reveal>
+        </span>
+      </div>
 
-        <Reveal className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <a
-            href={`mailto:${identity.email}`}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--accent-from)] to-[var(--accent-to)] px-6 py-3 font-medium text-[#06070a] transition-transform hover:scale-[1.03] active:scale-[0.99] sm:w-auto"
-          >
-            <Mail className="h-4 w-4" aria-hidden="true" />
-            Email
-          </a>
-          <a
-            href={identity.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-6 py-3 font-medium transition-colors hover:border-[var(--accent-to)] sm:w-auto"
-          >
-            <GithubIcon className="h-4 w-4" />
-            GitHub
-          </a>
-          <a
-            href={contact.resumeHref}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-6 py-3 font-medium transition-colors hover:border-[var(--accent-to)] sm:w-auto"
-          >
-            <Download className="h-4 w-4" aria-hidden="true" />
-            Download Resume
-          </a>
-        </Reveal>
+      {/* contact.heading === "Let's build something great." — accent the tail */}
+      <h2
+        data-reveal
+        className="mt-8 max-w-[15ch] font-display text-[clamp(2.6rem,8vw,7rem)] font-light leading-[0.92] tracking-[-0.03em] text-ink"
+      >
+        Let&apos;s build{" "}
+        <em className="italic text-accent">something great.</em>
+      </h2>
 
-        <Reveal as="p" className="mt-8 font-mono text-xs text-[var(--muted)]">
-          {identity.email}
-        </Reveal>
-      </Reveal>
+      <p data-reveal className="mt-8 max-w-xl text-lg text-ink-2">
+        {contact.line}
+      </p>
+
+      <div
+        data-reveal
+        className="mt-14 flex flex-col border-t border-line"
+      >
+        {links.map((link) => (
+          <a
+            key={link.label}
+            href={link.href}
+            target={link.external ? "_blank" : undefined}
+            rel={link.external ? "noopener noreferrer" : undefined}
+            className="group flex items-center justify-between border-b border-line py-6"
+          >
+            <span className="flex items-center gap-4 font-display text-2xl text-ink transition-colors group-hover:text-accent md:text-3xl">
+              {link.label === "GitHub" && (
+                <GithubIcon className="h-6 w-6" />
+              )}
+              {link.label}
+            </span>
+            <span className="flex items-center gap-4 caption text-muted">
+              <span className="hidden sm:inline">{link.detail}</span>
+              <ArrowUpRight
+                className="h-5 w-5 text-ink transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-accent"
+                aria-hidden="true"
+              />
+            </span>
+          </a>
+        ))}
+      </div>
     </Section>
   );
 }

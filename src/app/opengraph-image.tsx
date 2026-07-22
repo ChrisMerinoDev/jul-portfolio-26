@@ -14,41 +14,76 @@ export default function OpengraphImage() {
           width: "100%",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
+          justifyContent: "space-between",
           padding: "80px",
-          background:
-            "radial-gradient(1000px 500px at 20% 0%, #1b1b4d, transparent), radial-gradient(900px 500px at 90% 100%, #0e3b45, transparent), #0a0a0b",
-          color: "#ededf2",
+          background: "#f1ece1",
+          color: "#14110d",
           fontFamily: "sans-serif",
         }}
       >
         <div
           style={{
-            fontSize: 26,
-            letterSpacing: 8,
-            color: "#22d3ee",
+            display: "flex",
+            justifyContent: "space-between",
+            fontSize: 24,
+            letterSpacing: 6,
+            color: "#6c6456",
             fontFamily: "monospace",
+            textTransform: "uppercase",
           }}
         >
-          EN · ES · PT
+          <span>Chris Merino</span>
+          <span style={{ color: "#1d2bff" }}>EN · ES · PT</span>
         </div>
+
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <div
+            style={{
+              fontSize: 110,
+              fontWeight: 300,
+              lineHeight: 1,
+              letterSpacing: -3,
+            }}
+          >
+            Frontend engineer
+          </div>
+          <div
+            style={{
+              display: "flex",
+              fontSize: 110,
+              fontWeight: 300,
+              lineHeight: 1,
+              letterSpacing: -3,
+              fontStyle: "italic",
+            }}
+          >
+            <span>crafting&nbsp;</span>
+            <span style={{ color: "#1d2bff" }}>fast,&nbsp;</span>
+            <span>accessible</span>
+          </div>
+          <div
+            style={{
+              fontSize: 110,
+              fontWeight: 300,
+              lineHeight: 1,
+              letterSpacing: -3,
+              fontStyle: "italic",
+            }}
+          >
+            interfaces.
+          </div>
+        </div>
+
         <div
           style={{
-            fontSize: 96,
-            fontWeight: 700,
-            marginTop: 20,
-            backgroundImage: "linear-gradient(120deg, #6366f1, #22d3ee)",
-            backgroundClip: "text",
-            color: "transparent",
+            fontSize: 24,
+            letterSpacing: 4,
+            color: "#6c6456",
+            fontFamily: "monospace",
+            textTransform: "uppercase",
           }}
         >
-          Chris Merino
-        </div>
-        <div style={{ fontSize: 40, marginTop: 12, color: "#a1a1ac" }}>
-          Frontend Engineer
-        </div>
-        <div style={{ fontSize: 28, marginTop: 28, color: "#cfcfd6", maxWidth: 900 }}>
-          Fast, accessible web apps with React, Next.js, and TypeScript.
+          React · Next.js · TypeScript
         </div>
       </div>
     ),
