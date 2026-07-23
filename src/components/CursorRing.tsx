@@ -41,6 +41,13 @@ export function CursorRing() {
     const prevCursor = root.style.cursor;
     root.style.cursor = "none";
 
+    // `cursor: none` on <html> alone doesn't win over the `cursor: pointer`
+    // that links/buttons set on themselves, so force it off everywhere while
+    // the custom sight is active.
+    const style = document.createElement("style");
+    style.textContent = "*, *::before, *::after { cursor: none !important; }";
+    document.head.appendChild(style);
+
     const BASE = 34;
     const HOVER = 92;
 
@@ -140,6 +147,7 @@ export function CursorRing() {
       document.removeEventListener("mouseleave", onLeave);
       cancelAnimationFrame(raf);
       root.style.cursor = prevCursor;
+      style.remove();
     };
   }, []);
 
