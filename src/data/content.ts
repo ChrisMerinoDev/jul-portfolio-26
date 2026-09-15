@@ -155,7 +155,7 @@ export const projects: Project[] = [
 export const contact = {
   heading: "Let's build something great.",
   line: "Open to frontend engineering roles and freelance work.",
-  resumeHref: "/ChrisMResume-FE-26.pdf",
+  resumeHref: "/ChrisMerino-FE.pdf",
   socials: {
     github: "https://github.com/ChrisMerinoDev",
     linkedin: "https://www.linkedin.com/in/chrismerinodev",
