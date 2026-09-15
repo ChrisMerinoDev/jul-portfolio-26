@@ -1,53 +1,15 @@
-"use client";
-
-import { useEffect, useRef } from "react";
 import { ArrowDown, ArrowRight } from "lucide-react";
-import { gsap } from "@/lib/gsap";
 import { hero, identity } from "@/data/content";
 import { AmbientBackground } from "./AmbientBackground";
 
+/**
+ * Server-rendered hero. The intro cascade (masked line slide-up + staggered
+ * fade-ins) is driven entirely by CSS keyframes in globals.css, so it ships in
+ * the initial HTML/CSS and plays on first paint with no JS to download or run.
+ */
 export function Hero() {
-  const root = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) {
-      // No animation — just make sure descenders aren't clipped by the masks.
-      gsap.set("[data-hero-line]", { overflow: "visible" });
-      return;
-    }
-
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        defaults: { ease: "power4.out" },
-        // Open the masks once the reveal is done so serif descenders show.
-        onComplete: () =>
-          gsap.set("[data-hero-line]", { overflow: "visible" }),
-      });
-      tl.from("[data-hero-line] > span", {
-        yPercent: 118,
-        duration: 1.15,
-        stagger: 0.11,
-      })
-        .from(
-          "[data-hero-meta]",
-          { opacity: 0, y: 14, duration: 0.8, stagger: 0.08 },
-          "-=0.75",
-        )
-        .from(
-          "[data-hero-cta]",
-          { opacity: 0, y: 18, duration: 0.7, stagger: 0.1 },
-          "-=0.5",
-        )
-        .from("[data-hero-cue]", { opacity: 0, duration: 0.7 }, "-=0.25");
-    }, root);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section
-      ref={root}
       id="top"
       className="relative flex min-h-svh flex-col justify-between px-6 pb-10 pt-28 sm:px-10 sm:pt-32"
     >

@@ -33,6 +33,12 @@ export function ScrollBackground() {
   useEffect(() => {
     const root = document.documentElement;
     let raf = 0;
+    // Writing --accent / --paper on :root recalculates every element that
+    // references them, so we cache the last emitted values and skip the write
+    // when the rounded color hasn't actually changed. This keeps fast scrolls
+    // from thrashing style recalc on frames where the color is visually stable.
+    let lastAccent = "";
+    let lastPaper = "";
 
     const apply = () => {
       const max = root.scrollHeight - root.clientHeight;
@@ -44,19 +50,25 @@ export function ScrollBackground() {
       const a = STOPS[i];
       const b = STOPS[i + 1];
 
-      const accent: [number, number, number] = [
+      const accent = toRgb([
         lerp(a.accent[0], b.accent[0], t),
         lerp(a.accent[1], b.accent[1], t),
         lerp(a.accent[2], b.accent[2], t),
-      ];
-      const paper: [number, number, number] = [
+      ]);
+      const paper = toRgb([
         lerp(a.paper[0], b.paper[0], t),
         lerp(a.paper[1], b.paper[1], t),
         lerp(a.paper[2], b.paper[2], t),
-      ];
+      ]);
 
-      root.style.setProperty("--accent", toRgb(accent));
-      root.style.setProperty("--paper", toRgb(paper));
+      if (accent !== lastAccent) {
+        root.style.setProperty("--accent", accent);
+        lastAccent = accent;
+      }
+      if (paper !== lastPaper) {
+        root.style.setProperty("--paper", paper);
+        lastPaper = paper;
+      }
     };
 
     const onScroll = () => {

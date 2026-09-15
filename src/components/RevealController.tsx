@@ -1,53 +1,63 @@
 "use client";
 
 import { useEffect } from "react";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
 
 /**
- * Single global scroll-reveal controller.
+ * Single global scroll-reveal controller — native IntersectionObserver, zero
+ * animation libraries.
  *
- * Any element in the tree marked `data-reveal` starts hidden (via the
- * `.reveal-init` CSS rule) and is animated up + in as it enters the viewport.
- * Elements close together in the document animate as a staggered batch, which
- * gives sections a hand-choreographed cascade without per-component JS.
+ * Any element marked `data-reveal` starts hidden (via the `.reveal-init` CSS
+ * rule) and transitions up + in when it scrolls into view. The actual motion
+ * is CSS (see globals.css); this only toggles the `.is-revealed` class. Because
+ * there's no library to download or parse, reveals are armed the moment the
+ * page hydrates and fire instantly on scroll.
  *
- * Keeping this the only client component for reveals lets the actual section
- * markup stay as server components.
+ * Elements that enter together in one observer callback are staggered via a
+ * per-element `transition-delay`, reproducing a hand-choreographed cascade
+ * without per-component JS.
  */
 export function RevealController() {
   useEffect(() => {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const root = document.documentElement;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     if (reduce) {
-      // Show everything immediately — no motion.
+      // Show everything immediately — no motion, no observer.
       root.classList.remove("reveal-init");
       return;
     }
 
-    const ctx = gsap.context(() => {
-      const els = gsap.utils.toArray<HTMLElement>("[data-reveal]");
-      gsap.set(els, { y: 30, opacity: 0 });
+    const els = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-reveal]"),
+    );
+    if (els.length === 0) return;
 
-      ScrollTrigger.batch(els, {
-        start: "top 88%",
-        onEnter: (batch) =>
-          gsap.to(batch, {
-            y: 0,
-            opacity: 1,
-            duration: 1,
-            ease: "power3.out",
-            stagger: 0.09,
-            overwrite: true,
-          }),
-      });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Stagger everything that crossed the threshold in this frame, in
+        // document order, for a cascading batch effect.
+        const entering = entries
+          .filter((e) => e.isIntersecting)
+          .sort(
+            (a, b) =>
+              (a.target as HTMLElement).offsetTop -
+              (b.target as HTMLElement).offsetTop,
+          );
 
-      // The class only existed to prevent a flash before this ran.
-      root.classList.remove("reveal-init");
-      ScrollTrigger.refresh();
-    });
+        entering.forEach((entry, i) => {
+          const el = entry.target as HTMLElement;
+          el.style.transitionDelay = `${i * 90}ms`;
+          el.classList.add("is-revealed");
+          observer.unobserve(el);
+        });
+      },
+      // Start a touch before the element is fully in view.
+      { rootMargin: "0px 0px -12% 0px", threshold: 0.01 },
+    );
 
-    return () => ctx.revert();
+    els.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
   }, []);
 
   return null;

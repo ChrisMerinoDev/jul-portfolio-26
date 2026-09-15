@@ -101,16 +101,82 @@ body::after {
   text-decoration: none;
 }
 
-/* Masked line for GSAP reveals: children translate up from behind the mask */
+/* Masked line for hero reveals: children translate up from behind the mask.
+   `clip` + a small clip-margin lets serif descenders show at rest while the
+   text that slides in from 118% below stays clipped during the animation —
+   so no JS is needed to "open" the mask afterwards. */
 @utility line-mask {
-  overflow: hidden;
+  overflow: clip;
+  overflow-clip-margin: 0.35em;
   display: block;
 }
 
-/* Prevent flash-of-unrevealed-content before GSAP runs (JS toggles this off) */
-.reveal-init [data-reveal],
-.reveal-init[data-reveal] {
+/* ---- Scroll reveals (pure CSS + IntersectionObserver) ----------
+   Elements marked `data-reveal` start hidden and transition in when the
+   observer adds `.is-revealed`. The hidden state is gated behind
+   `.reveal-init` (set on <html>) so a JS-off page — where <noscript> flips
+   that guard — never leaves content invisible. */
+.reveal-init [data-reveal] {
   opacity: 0;
+  transform: translateY(30px);
+}
+[data-reveal] {
+  transition:
+    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-init [data-reveal].is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---- Hero intro (pure CSS, runs on paint — no library gate) ----
+   Base state is the FINAL visible state; each keyframe animates *from* the
+   hidden state with `both` fill, so if animation is ever disabled the content
+   is already correct. */
+@keyframes hero-line-in {
+  from {
+    transform: translateY(118%);
+  }
+}
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+@keyframes hero-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+[data-hero-line] > span {
+  animation: hero-line-in 1.15s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+[data-hero-line]:nth-child(1) > span {
+  animation-delay: 0.1s;
+}
+[data-hero-line]:nth-child(2) > span {
+  animation-delay: 0.21s;
+}
+[data-hero-line]:nth-child(3) > span {
+  animation-delay: 0.32s;
+}
+[data-hero-meta] {
+  animation: hero-rise 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.5s;
+}
+[data-hero-cta] {
+  animation: hero-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.72s;
+}
+[data-hero-cta]:nth-of-type(2) {
+  animation-delay: 0.82s;
+}
+[data-hero-cue] {
+  animation: hero-fade 0.7s ease both;
+  animation-delay: 0.95s;
 }
 
 /* Marquee track */
@@ -138,12 +204,14 @@ body::after {
   *::before,
   *::after {
     animation-duration: 0.001ms !important;
+    animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
   .reveal-init [data-reveal],
   .reveal-init[data-reveal] {
     opacity: 1 !important;
+    transform: none !important;
   }
 }
 
