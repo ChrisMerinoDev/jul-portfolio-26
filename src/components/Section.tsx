@@ -10,7 +10,7 @@ type SectionProps = {
 
 /**
  * Editorial section shell — generous magazine gutters and vertical rhythm.
- * Server component; scroll reveals are handled globally by RevealController.
+ * Server component; all content renders visible and static (no scroll reveal).
  */
 export function Section({ id, className = "", children }: SectionProps) {
   return (
@@ -26,8 +26,9 @@ export function Section({ id, className = "", children }: SectionProps) {
 type As = "div" | "li" | "h2" | "h3" | "p" | "span" | "ul" | "ol";
 
 /**
- * A single element that reveals on scroll. Marked with `data-reveal`, which the
- * global controller finds and animates. Renders plain markup on the server.
+ * A content element. Previously animated on scroll; now renders plain, static
+ * markup that is visible from first paint. Kept as a thin wrapper so existing
+ * call sites don't need to change.
  */
 export function Reveal({
   children,

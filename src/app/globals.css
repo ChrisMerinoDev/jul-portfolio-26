@@ -111,25 +111,6 @@ body::after {
   display: block;
 }
 
-/* ---- Scroll reveals (pure CSS + IntersectionObserver) ----------
-   Elements marked `data-reveal` start hidden and transition in when the
-   observer adds `.is-revealed`. The hidden state is gated behind
-   `.reveal-init` (set on <html>) so a JS-off page — where <noscript> flips
-   that guard — never leaves content invisible. */
-.reveal-init [data-reveal] {
-  opacity: 0;
-  transform: translateY(30px);
-}
-[data-reveal] {
-  transition:
-    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.reveal-init [data-reveal].is-revealed {
-  opacity: 1;
-  transform: none;
-}
-
 /* ---- Hero intro (pure CSS, runs on paint — no library gate) ----
    Base state is the FINAL visible state; each keyframe animates *from* the
    hidden state with `both` fill, so if animation is ever disabled the content
@@ -207,11 +188,6 @@ body::after {
     animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
-  }
-  .reveal-init [data-reveal],
-  .reveal-init[data-reveal] {
-    opacity: 1 !important;
-    transform: none !important;
   }
 }
 

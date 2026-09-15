@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Newsreader, Archivo, IBM_Plex_Mono } from "next/font/google";
 import { Toaster } from "sonner";
 import { CursorRing } from "@/components/CursorRing";
-import { RevealController } from "@/components/RevealController";
 import { ScrollBackground } from "@/components/ScrollBackground";
 import "./globals.css";
 
@@ -78,18 +77,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${newsreader.variable} ${archivo.variable} ${plexMono.variable} reveal-init h-full antialiased`}
+      className={`${newsreader.variable} ${archivo.variable} ${plexMono.variable} h-full antialiased`}
     >
-      <head>
-        {/* If JS is off, never leave reveal content hidden */}
-        <noscript>
-          <style>{`.reveal-init [data-reveal]{opacity:1 !important;transform:none !important}`}</style>
-        </noscript>
-      </head>
       <body className="min-h-full flex flex-col">
         <ScrollBackground />
         <CursorRing />
-        <RevealController />
         {children}
         <Toaster
           position="bottom-right"
