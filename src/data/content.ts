@@ -48,6 +48,10 @@ export const techStack: TechGroup[] = [
     items: ["Node.js", "Supabase", "MongoDB", "PostgreSQL"],
   },
   {
+    label: "Testing",
+    items: ["Jest", "Vitest", "React Testing Library"],
+  },
+  {
     label: "UI & Tooling",
     items: ["TipTap", "Monaco Editor", "GSAP", "Framer Motion", "Recharts", "Web Workers"],
   },
@@ -68,13 +72,14 @@ export type ExperienceItem = {
 export const experience: ExperienceItem[] = [
   {
     role: "Frontend Engineer Intern",
-    org: "Medlaunch Concepts",
-    dates: "Apr 2026 – Jul 2026",
+    org: "MedLaunch Concepts",
+    dates: "May 2026 – Sep 2026",
     context:
-      "Medlaunch Portal, a healthcare accreditation and quality management platform (React 19, Vite).",
+      "MedLaunch Portal, a healthcare accreditation and quality management platform (React 19, Vite).",
     points: [
       "Shipped the platform's first in-app onboarding system in React, guiding users through 17 interactive product tours with live-state gating and branching flows.",
       "Improved application performance by replacing oversized data loads with true server-side pagination and a role-gated reviewer view, keeping the interface responsive as data grew.",
+      "Cut first-search response time from 23 seconds to 2 seconds (91% reduction) by pre-warming a serverless search function on page load.",
       "Built a compliance-focused policy authoring suite with a TipTap rich-text editor and live acknowledgment tracking, and refactored a monolithic data layer into reusable utilities.",
     ],
   },
@@ -90,9 +95,21 @@ export const experience: ExperienceItem[] = [
     ],
   },
   {
+    role: "Freelance Frontend Developer",
+    org: "MidnightDrip",
+    dates: "Oct 2025 – Dec 2025",
+    context:
+      "Custom Shopify storefront theme built in Liquid, HTML/CSS, and vanilla JavaScript. Live at midnightdrip.com",
+    points: [
+      "Independently learned Shopify, Liquid, and the Shopify CLI to ship five production theme sections with configurable schema settings, enabling full no-code editing for the client.",
+      "Rebuilt the homepage hero into a dual-media system with separate desktop/mobile image or video slots and autoplay video.",
+      "Improved performance and conversion with responsive images (srcset/sizes), lazy loading, an ARIA-compliant mobile nav drawer, and a newsletter signup wired to Shopify's welcome discount flow.",
+    ],
+  },
+  {
     role: "Gymnastics Head Coach & Team Leader",
     org: "TAG USA Gymnastics",
-    dates: "2023 – Present",
+    dates: "2021 – Present",
     points: [
       "Lead and develop competitive teams, coaching athletes to championship titles.",
       "Own season planning and make real-time decisions under pressure in high-stakes competitions.",
@@ -148,6 +165,20 @@ export const projects: Project[] = [
       label: "View Project",
       href: "https://aceloop.vercel.app",
       domain: "aceloop.vercel.app",
+    },
+  },
+  {
+    name: "MidnightDrip",
+    tagline: "Custom Shopify storefront theme for an independent apparel brand.",
+    description:
+      "A custom Shopify storefront theme built in Liquid, HTML/CSS, and vanilla JavaScript, with five configurable theme sections for full no-code editing, a dual-media homepage hero (separate desktop/mobile image or video slots with autoplay), responsive images, lazy loading, an ARIA-compliant mobile nav drawer, and a newsletter signup wired to Shopify's welcome discount flow.",
+    tags: ["Shopify", "Liquid", "JavaScript", "HTML/CSS"],
+    status: "Live",
+    action: {
+      kind: "link",
+      label: "Visit Site",
+      href: "https://midnightdrip.com",
+      domain: "midnightdrip.com",
     },
   },
 ];
